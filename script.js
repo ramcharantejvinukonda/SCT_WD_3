@@ -1,71 +1,178 @@
-let startTime = 0;
-let elapsedTime = 0;
-let timerInterval;
+// Select all cells
+const cells = document.querySelectorAll(".cell");
 
-const display = document.getElementById("display");
-const laps = document.getElementById("laps");
+// Select status text
+const statusText = document.getElementById("status");
 
-function formatTime(ms){
+// Select restart button
+const resetButton = document.getElementById("resetBtn");
 
-    let hours = Math.floor(ms / 3600000);
-    let minutes = Math.floor((ms % 3600000) / 60000);
-    let seconds = Math.floor((ms % 60000) / 1000);
-    let milliseconds = Math.floor((ms % 1000) / 10);
 
-    return (
-        String(hours).padStart(2,'0') + ":" +
-        String(minutes).padStart(2,'0') + ":" +
-        String(seconds).padStart(2,'0') + "." +
-        String(milliseconds).padStart(2,'0')
-    );
+// Game board
+let board = ["", "", "", "", "", "", "", ""];
+
+
+// Current player
+let currentPlayer = "X";
+
+
+// Game status
+let gameActive = true;
+
+
+// Winning combinations
+const winningPatterns = [
+
+    [0, 1, 2],
+
+    [3, 4, 5],
+
+    [6, 7, 8],
+
+    [0, 3, 6],
+
+    [1, 4, 7],
+
+    [2, 5, 8],
+
+    [0, 4, 8],
+
+    [2, 4, 6]
+
+];
+
+
+// Add click event to every cell
+cells.forEach(cell => {
+
+    cell.addEventListener("click", handleCellClick);
+
+});
+
+
+// Function to handle user click
+function handleCellClick(event) {
+
+    const clickedCell = event.target;
+
+    const clickedIndex = clickedCell.getAttribute("data-index");
+
+
+    // Stop if cell is already filled
+    if (board[clickedIndex] !== "" || !gameActive) {
+
+        return;
+
+    }
+
+
+    // Store current player symbol
+    board[clickedIndex] = currentPlayer;
+
+    clickedCell.textContent = currentPlayer;
+
+
+    // Add CSS class
+    clickedCell.classList.add(currentPlayer.toLowerCase());
+
+
+    // Check game result
+    checkResult();
+
 }
 
-function updateDisplay(){
-    display.textContent = formatTime(elapsedTime);
+
+// Check winner
+function checkResult() {
+
+    let winnerFound = false;
+
+
+    for (let pattern of winningPatterns) {
+
+        const position1 = board[pattern[0]];
+
+        const position2 = board[pattern[1]];
+
+        const position3 = board[pattern[2]];
+
+
+        if (
+
+            position1 !== "" &&
+
+            position1 === position2 &&
+
+            position2 === position3
+
+        ) {
+
+            winnerFound = true;
+
+            break;
+
+        }
+
+    }
+
+
+    // If winner is found
+    if (winnerFound) {
+
+        statusText.textContent = `🎉 Player ${currentPlayer} Wins!`;
+
+        gameActive = false;
+
+        return;
+
+    }
+
+
+    // Check draw
+    if (!board.includes("")) {
+
+        statusText.textContent = "🤝 Game Draw!";
+
+        gameActive = false;
+
+        return;
+
+    }
+
+
+    // Change player
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+
+    statusText.textContent = `Player ${currentPlayer}'s Turn`;
+
 }
 
-document.getElementById("start").onclick = function(){
 
-    startTime = Date.now() - elapsedTime;
+// Restart game
+resetButton.addEventListener("click", resetGame);
 
-    timerInterval = setInterval(function(){
 
-        elapsedTime = Date.now() - startTime;
+function resetGame() {
 
-        updateDisplay();
+    board = ["", "", "", "", "", "", "", ""];
 
-    },10);
+    currentPlayer = "X";
 
-};
+    gameActive = true;
 
-document.getElementById("pause").onclick = function(){
 
-    clearInterval(timerInterval);
+    statusText.textContent = "Player X's Turn";
 
-};
 
-document.getElementById("reset").onclick = function(){
+    cells.forEach(cell => {
 
-    clearInterval(timerInterval);
+        cell.textContent = "";
 
-    elapsedTime = 0;
+        cell.classList.remove("x");
 
-    updateDisplay();
+        cell.classList.remove("o");
 
-    laps.innerHTML = "";
+    });
 
-};
-
-document.getElementById("lap").onclick = function(){
-
-    if(elapsedTime===0) return;
-
-    const li = document.createElement("li");
-
-    li.textContent = formatTime(elapsedTime);
-
-    laps.appendChild(li);
-
-};
-
-updateDisplay();
+}

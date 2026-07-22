@@ -1,58 +1,110 @@
-body{
-    margin:0;
-    padding:0;
-    background:#111827;
-    color:white;
-    font-family:Arial,sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.container{
-    text-align:center;
-    background:#1f2937;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 0 15px rgba(0,0,0,.5);
-    width:350px;
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55);
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#display{
-    font-size:42px;
-    margin:20px 0;
-    font-weight:bold;
+.game-container {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+
+    width: 350px;
 }
 
-button{
-    padding:10px 20px;
-    margin:5px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:16px;
+h1 {
+    margin-bottom: 15px;
+
+    color: #222;
 }
 
-#start{background:#22c55e;color:white;}
-#pause{background:#f59e0b;color:white;}
-#reset{background:#ef4444;color:white;}
-#lap{background:#3b82f6;color:white;}
+#status {
+    font-size: 20px;
 
-button:hover{
-    opacity:0.9;
+    font-weight: bold;
+
+    margin-bottom: 20px;
+
+    color: #444;
 }
 
-#laps{
-    list-style:none;
-    padding:0;
-    max-height:200px;
-    overflow:auto;
+.game-board {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-bottom: 25px;
 }
 
-#laps li{
-    background:#374151;
-    padding:8px;
-    margin:5px;
-    border-radius:6px;
+.cell {
+    width: 90px;
+
+    height: 90px;
+
+    font-size: 45px;
+
+    font-weight: bold;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #e9ecef;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.cell:hover {
+    background: #d6d8db;
+
+    transform: scale(1.05);
+}
+
+.cell.x {
+    color: #e63946;
+}
+
+.cell.o {
+    color: #457b9d;
+}
+
+#resetBtn {
+    padding: 12px 25px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #222;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+#resetBtn:hover {
+    background: #444;
 }
